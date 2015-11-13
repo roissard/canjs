@@ -212,7 +212,14 @@ steal(
 					}
 					// check if we should be running this on a parent.
 					else if (isInParentContext) {
-						return this._parent.read(attr.substr(3), options);
+						// walk up until we find a parent that can have context.
+						// the `isContextBased` check above won't catch it when you go from
+						// `../foo` to `foo` because `foo` isn't context based.
+						var parent = this._parent;
+						while(parent._meta.notContext) {
+							parent = parent._parent;
+						}
+						return parent.read(attr.substr(3), options);
 					}
 					else if ( isCurrentContext ) {
 						return {
