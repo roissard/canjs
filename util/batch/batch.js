@@ -222,10 +222,17 @@ steal('can/util/can.js', function (can) {
 				} : event;
 
 				if( currentBatchEvents) {
+					var handlers = {};
+					can.each(item.__bindEvents, function(value, index) {
+						handlers[index] = [];
+						can.each(value, function(handler) {
+							handlers[index].push(handler);
+						});
+					});
 
 					currentBatchEvents.push([
 						item,
-						[event, args]
+						[event, args, handlers]
 					]);
 
 				} else if (transactions === 0) {

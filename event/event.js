@@ -249,6 +249,12 @@ steal('can/util/can.js', function (can) {
 		
 		// Grab event listeners
 		var handlers = events[eventName];
+
+		if (arguments.length===3)
+		{
+			handlers = arguments[2][eventName];
+		}
+
 		if(!handlers) {
 			return;
 		} else {
